@@ -1,10 +1,15 @@
 import unittest
+import json
+from pathlib import Path
 
 from embervault_sdk import ModuleContext
 from src.module import plan_setting_change
 
 
 class GameTuningTests(unittest.TestCase):
+    def test_manifest_matches_staged_only_boundary(self):
+        manifest = json.loads((Path(__file__).parents[1] / "module.json").read_text(encoding="utf-8"))
+        self.assertTrue(manifest["safety"]["read_only"])
     def test_setting_change_is_staged_only(self):
         result = plan_setting_change(ModuleContext("embervault.game-tuning", "research", "EV-OP-1"),
                                      "resource_yield_multiplier", 2.0, "research")
